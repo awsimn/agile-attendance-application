@@ -3,39 +3,40 @@ USE db_attendance_system;
 
 -- Database tables
 
-CREATE TABLE IF NOT EXISTS users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    user_password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'teacher', 'student') NOT NULL,
-    full_name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- User Data
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,          -- Identifier for all users
+    email VARCHAR(255) UNIQUE NOT NULL,         -- Unique login credentials
+    user_password VARCHAR(255) NOT NULL,        -- Password
+    role ENUM('admin', 'teacher', 'student') NOT NULL, -- RBAC (Role-Based Access Control)
+    full_name VARCHAR(255) NOT NULL,            -- Human-readable name
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Account creation timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update tracker
 );
 
 -- Students Specific Data
 CREATE TABLE students (
-    user_id INT PRIMARY KEY,
-    consent_given BOOLEAN DEFAULT FALSE,
-    facial_data_consent_given BOOLEAN DEFAULT FALSE,
+    user_id INT PRIMARY KEY,                    -- 1:1 relationship with users table
+    consent_given BOOLEAN DEFAULT FALSE,        -- General data consent
+    facial_data_consent_given BOOLEAN DEFAULT FALSE, -- Facial recognition consent
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Classes Specific Data
 CREATE TABLE classes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    class_name VARCHAR(255) NOT NULL,
-    teacher_id INT NOT NULL,
-    schedule JSON,
+    id INT PRIMARY KEY AUTO_INCREMENT,          -- Class identifier
+    class_name VARCHAR(255) NOT NULL,           -- Course name (e.g "Comp Security")
+    teacher_id INT NOT NULL,                    -- Teacher reference
+    schedule JSON,                              -- Flexible timetable storage
     FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Class Enrollment Data
 CREATE TABLE class_enrollment (
-    class_id INT NOT NULL,
-    student_id INT NOT NULL,
-    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (class_id, student_id),
+    class_id INT NOT NULL,                      -- Reference to class
+    student_id INT NOT NULL,                    -- Reference to student
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Enrollment timestamp
+    PRIMARY KEY (class_id, student_id),         -- PK
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -47,7 +48,7 @@ CREATE TABLE leave_requests (
     class_id INT NOT NULL,                      -- Affected class
     start_date DATE NOT NULL,                   -- Leave start
     end_date DATE NOT NULL,                     -- Leave end
-    reason TEXT,                                -- Free-text explanation
+    reason TEXT,                                -- Text explanation
     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     responded_by INT,                           -- Approving/rejecting teacher
     response_notes TEXT,                        -- Teacher comments

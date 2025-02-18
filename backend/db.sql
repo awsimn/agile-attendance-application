@@ -29,3 +29,12 @@ CREATE TABLE classes (
     schedule JSON,
     FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE class_enrollment (
+    class_id INT NOT NULL,
+    student_id INT NOT NULL,
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (class_id, student_id),
+    FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
+);

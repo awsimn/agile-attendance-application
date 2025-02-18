@@ -56,3 +56,17 @@ CREATE TABLE leave_requests (
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 );
+
+-- Attendance Record Data
+CREATE TABLE attendance (
+    id INT PRIMARY KEY AUTO_INCREMENT,          -- Attendance record
+    student_id INT NOT NULL,                    -- Student being tracked
+    class_id INT NOT NULL,                      -- Associated class
+    attendance_date DATE NOT NULL,              -- Date of attendance
+    status ENUM('present', 'absent', 'tardy') NOT NULL, -- Attendance state
+    method ENUM('facial', 'manual') NOT NULL,   -- Tracking method
+    marked_by INT,                              -- Teacher ID or system marker
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
+);

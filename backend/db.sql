@@ -1,4 +1,22 @@
 CREATE DATABASE IF NOT EXISTS db_attendance_system;
 USE db_attendance_system;
 
--- Database tables will be defined here
+-- Database tables
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'teacher', 'student') NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Students Specific Data
+CREATE TABLE students (
+    user_id INT PRIMARY KEY,
+    consent_given BOOLEAN DEFAULT FALSE,
+    facial_data_consent_given BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

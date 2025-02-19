@@ -71,6 +71,17 @@ CREATE TABLE attendance (
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 );
 
+-- Facial Recognition Data
+CREATE TABLE facial_data (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT UNIQUE NOT NULL,             -- 1:1 student relationship
+    faceprint_encrypted BLOB NOT NULL,          -- Encrypted biometric data
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL,                  -- GDPR deletion marker
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Student badge gamification data
 CREATE TABLE badges (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,                 -- Badge title (e.g "Perfect Attendance")

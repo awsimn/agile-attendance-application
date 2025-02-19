@@ -70,3 +70,19 @@ CREATE TABLE attendance (
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 );
+
+CREATE TABLE badges (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,                 -- Badge title (e.g "Perfect Attendance")
+    description TEXT,                           -- Achievement criteria
+    attendance_threshold INT NOT NULL           -- Required attendance count
+);
+
+CREATE TABLE student_badges (
+    student_id INT NOT NULL,                    -- Awardee
+    badge_id INT NOT NULL,                      -- Award type
+    awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (student_id, badge_id),         -- PK
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (badge_id) REFERENCES badges(id) ON DELETE CASCADE
+);

@@ -140,3 +140,5 @@ dist
 
 # End of code copied from the .gitignore template for node projects
 # Copied from https://github.com/github/gitignore/blob/main/Node.gitignore
+
+.env

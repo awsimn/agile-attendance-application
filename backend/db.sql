@@ -8,7 +8,7 @@ CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,          -- Identifier for all users
     email VARCHAR(255) UNIQUE NOT NULL,         -- Unique login credentials
     user_password VARCHAR(255) NOT NULL,        -- Password
-    role ENUM('admin', 'teacher', 'student') NOT NULL, -- RBAC (Role-Based Access Control)
+    role ENUM('admin', 'teacher', 'student') NOT NULL, -- Role-Based Access Control
     full_name VARCHAR(255) NOT NULL,            -- Human-readable name
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Account creation timestamp
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update tracker
